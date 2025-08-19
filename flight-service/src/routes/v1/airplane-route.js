@@ -1,6 +1,10 @@
 const express = require("express");
 const { airplaneController } = require("../../controllers");
-const { validateCreateRequest } = require("../../middlewares");
+const {
+  validateCreateRequest,
+  validatePatchRequest,
+  validatePutRequest,
+} = require("../../middlewares");
 
 const airplaneRoute = express.Router();
 
