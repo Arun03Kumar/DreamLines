@@ -5,5 +5,6 @@ const flightRoute = express.Router();
 
 flightRoute.post("/", validateFlightRequest, flightController.createFlight);
 flightRoute.get("/", flightController.getAllFlights);
+flightRoute.get("/:id", flightController.getFlightById);
 
 module.exports = flightRoute;

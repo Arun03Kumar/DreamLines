@@ -63,6 +63,22 @@ class FlightService {
       );
     }
   }
+
+  async getFlightById(flightId) {
+    try {
+      const flight = await this.flightRepository.get(flightId);
+      if (!flight) {
+        throw new AppError("Flight not found", StatusCodes.NOT_FOUND);
+      }
+      return flight;
+    } catch (error) {
+      console.error("Error fetching flight:", error);
+      throw new AppError(
+        "Cannot fetch flight data",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 }
 
 module.exports = FlightService;
