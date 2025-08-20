@@ -1,6 +1,9 @@
 const axios = require("axios");
 const db = require("../models");
 const { ServerConfig } = require("../config");
+const BookingRepository = require("../repositories/booking-repository");
+
+const bookingRepository = new BookingRepository();
 
 async function createBooking(data) {
   try {
@@ -11,7 +14,21 @@ async function createBooking(data) {
       if (flight.data.data.totalSeats < data.noOfSeats) {
         throw { message: "Not enough seats available" };
       }
-      return true;
+      const totalBillingAmount = data.noOfSeats * flight.data.data.price;
+      const bookingPayload = { ...data, totalCost: totalBillingAmount };
+      const booking = await bookingRepository.createBooking(
+        bookingPayload,
+        transaction
+      );
+
+      const response = await axios.patch(
+        `${ServerConfig.FLIGHT_SERVICE_URL}/${data.flightId}/update-seats`,
+        {
+          seats: data.noOfSeats,
+          dec: true,
+        }
+      );
+      return booking;
     });
     // return result;
   } catch (error) {
