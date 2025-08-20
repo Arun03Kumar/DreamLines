@@ -9,6 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Airplane, {
+        foreignKey: "airplaneId",
+        as: "airplane_details",
+      });
+      this.belongsTo(models.Airport, {
+        foreignKey: "departureAirportId",
+        as: "departure_airport",
+      });
+      this.belongsTo(models.Airport, {
+        foreignKey: "arrivalAirportId",
+        as: "arrival_airport",
+      });
     }
   }
   Flight.init(
