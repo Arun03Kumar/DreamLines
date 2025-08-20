@@ -13,6 +13,7 @@ class FlightService {
 
   async getAllFlights(query) {
     let customFilter = {};
+    let sortFilter = [];
     if (query.trips) {
       const [departureAirportId, arrivalAirportId] = query.trips.split("-");
 
@@ -42,8 +43,17 @@ class FlightService {
       };
     }
 
+    if (query.sort) {
+      const params = query.sort.split(",");
+      const sortFilters = params.map((param) => param.split("_"));
+      sortFilter = sortFilters;
+    }
+
     try {
-      const flights = await this.flightRepository.getAllFlights(customFilter);
+      const flights = await this.flightRepository.getAllFlights(
+        customFilter,
+        sortFilter
+      );
       return flights;
     } catch (error) {
       console.error("Error fetching flights:", error);
