@@ -45,8 +45,28 @@ async function getFlightById(req, res) {
   }
 }
 
+async function updateSeats(req, res) {
+  try {
+    const { seats, dec } = req.body;
+    const flightId = req.params.id;
+    const response = await flightService.updateRemainingSeats(
+      flightId,
+      seats,
+      dec
+    );
+    successResponse.data = response;
+    return res.status(StatusCodes.OK).json(successResponse);
+  } catch (err) {
+    errorResponse.error = err;
+    return res
+      .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(errorResponse);
+  }
+}
+
 module.exports = {
   createFlight,
   getAllFlights,
   getFlightById,
+  updateSeats,
 };

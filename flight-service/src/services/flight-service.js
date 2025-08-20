@@ -79,6 +79,23 @@ class FlightService {
       );
     }
   }
+
+  async updateRemainingSeats(flightId, seats, dec = false) {
+    try {
+      const response = await this.flightRepository.updateRemainingSeats(
+        flightId,
+        seats,
+        dec
+      );
+      return response;
+    } catch (error) {
+      console.error("Error updating remaining seats:", error);
+      throw new AppError(
+        "Cannot update remaining seats",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 }
 
 module.exports = FlightService;

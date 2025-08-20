@@ -4,7 +4,10 @@ const {
   validatePatchRequest,
   validatePutRequest,
 } = require("./airplane-middleware");
-const { validateFlightRequest } = require("./flight-middleware");
+const {
+  validateFlightRequest,
+  validateUpdateSeats,
+} = require("./flight-middleware");
 
 module.exports = {
   validateCreateRequest,
@@ -12,4 +15,5 @@ module.exports = {
   validatePutRequest,
   validateCreateRequestAirport,
   validateFlightRequest,
+  validateUpdateSeats,
 };

@@ -34,4 +34,35 @@ function validateFlightRequest(req, res, next) {
   next();
 }
 
-module.exports = { validateFlightRequest };
+function validateUpdateSeats(req, res, next) {
+  const { seats, dec } = req.body;
+  const flightId = req.params.id;
+
+  if (flightId === undefined || flightId === null || flightId === "") {
+    errorResponse.message = "Invalid flight ID";
+    errorResponse.error = {
+      explanation: "Missing or invalid field: flightId",
+    };
+    return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
+  }
+
+  if (seats === undefined || seats === null || seats === "") {
+    errorResponse.message = "Invalid seats";
+    errorResponse.error = {
+      explanation: "Missing or invalid field: seats",
+    };
+    return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
+  }
+
+  // if (dec === undefined || dec === null || dec === "") {
+  //   errorResponse.message = "Invalid decrement flag";
+  //   errorResponse.error = {
+  //     explanation: "Missing or invalid field: dec",
+  //   };
+  //   return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
+  // }
+
+  next();
+}
+
+module.exports = { validateFlightRequest, validateUpdateSeats };
