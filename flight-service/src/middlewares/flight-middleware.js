@@ -12,7 +12,7 @@ function validateFlightRequest(req, res, next) {
     "arrivalTime",
     "departureTime",
     "price",
-    "boardinggate",
+    "boardingGate",
     "totalSeats",
   ];
 

@@ -4,5 +4,6 @@ const { validateFlightRequest } = require("../../middlewares");
 const flightRoute = express.Router();
 
 flightRoute.post("/", validateFlightRequest, flightController.createFlight);
+flightRoute.get("/", flightController.getAllFlights);
 
 module.exports = flightRoute;
