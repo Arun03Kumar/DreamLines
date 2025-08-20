@@ -5,10 +5,12 @@ async function createBooking(req, res) {
     console.log(req.body);
     const response = await BookingService.createBooking({
       flightId: req.body.flightId,
+      userId: req.body.userId,
+      noOfSeats: req.body.noOfSeats,
     });
-    res.status(201).json(response);
+    return res.status(201).json(response);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 }
 

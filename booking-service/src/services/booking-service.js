@@ -8,12 +8,15 @@ async function createBooking(data) {
       const flight = await axios.get(
         `${ServerConfig.FLIGHT_SERVICE_URL}/${data.flightId}`
       );
+      if (flight.data.data.totalSeats < data.noOfSeats) {
+        throw { message: "Not enough seats available" };
+      }
       return true;
     });
     // return result;
   } catch (error) {
     console.error("Error creating booking:", error);
-    throw new Error("Booking creation failed");
+    throw new Error(error.message);
   }
 }
 
