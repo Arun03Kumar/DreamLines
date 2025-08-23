@@ -79,6 +79,15 @@ async function makePayment(data) {
       data.bookingId,
       transaction
     );
+
+    const seats = await axios.post(
+      `${ServerConfig.SEAT_SERVICE_URL}/${bookingDetailsUpdated.flightId}/assign-seats`,
+      {
+        bookingId: bookingDetailsUpdated.id,
+        count: bookingDetailsUpdated.noOfSeats,
+      }
+    );
+
     await sendMessage("TICKET_NOTIFICATION_QUEUE", {
       subject: "Your DreamLines Flight Ticket",
       // recipientEmail: bookingDetailsUpdated.userEmail, // Ensure you have this data
@@ -87,10 +96,12 @@ async function makePayment(data) {
       // flightDetails: bookingDetailsUpdated.flightDetails,
       ticketNumber: bookingDetailsUpdated.id + "-" + Date.now(),
       // boardingTime: bookingDetailsUpdated.flightDetails.departureTime,
-      // seatNumber: bookingDetailsUpdated.seatNumbers || "To be assigned",
+      seatNumber: seats.data || "To be assigned",
     });
 
     await transaction.commit();
+    response.seats = seats.data;
+    console.log(JSON.stringify(seats.data, null, 2));
     console.log("Payment successful:", response);
     return response;
   } catch (err) {
