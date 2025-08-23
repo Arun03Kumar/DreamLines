@@ -3,6 +3,7 @@ const db = require("../models");
 const { ServerConfig } = require("../config");
 const BookingRepository = require("../repositories/booking-repository");
 const { BOOKING_STATUS } = require("../utils");
+const { sendMessage } = require("../config/queue-config");
 const { BOOKED, CANCELED } = BOOKING_STATUS;
 // console.log(BOOKING_STATUS, BOOKED);
 
@@ -73,6 +74,22 @@ async function makePayment(data) {
       { status: BOOKED },
       transaction
     );
+
+    const bookingDetailsUpdated = await bookingRepository.get(
+      data.bookingId,
+      transaction
+    );
+    await sendMessage("TICKET_NOTIFICATION_QUEUE", {
+      subject: "Your DreamLines Flight Ticket",
+      // recipientEmail: bookingDetailsUpdated.userEmail, // Ensure you have this data
+      userId: bookingDetailsUpdated.userId,
+      bookingId: bookingDetailsUpdated.id,
+      // flightDetails: bookingDetailsUpdated.flightDetails,
+      ticketNumber: bookingDetailsUpdated.id + "-" + Date.now(),
+      // boardingTime: bookingDetailsUpdated.flightDetails.departureTime,
+      // seatNumber: bookingDetailsUpdated.seatNumbers || "To be assigned",
+    });
+
     await transaction.commit();
     console.log("Payment successful:", response);
     return response;

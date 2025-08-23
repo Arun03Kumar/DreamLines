@@ -12,9 +12,11 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "amqplib": "^0.10.8",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "http-status-codes": "^2.3.0",
+    "nodemailer": "^7.0.5",
     "nodemon": "^3.1.10",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
